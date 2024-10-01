@@ -1,4 +1,11 @@
 import re, random
+
+
+#Variables to hold objects that are created.
+users={}
+authors=[]
+library=[]
+
 class BookOpperations:
     def __init__(self, title, author,  genre, publication_date, available,*on_loan_to):
         self._title=title
@@ -9,11 +16,11 @@ class BookOpperations:
         self.on_loan_to=on_loan_to
 
     #Create book okbject and add book object to libarary. Run new data through regex_checker to check that the user input is correct.
-    def set_book(self,library):
-        self._title=regex_checker(input("Book Name:"),r"^[a-zA-Z1-9.%+-]+","Please input a valid book title")
-        self._author=regex_checker(input("Author:"),r"^[a-zA-Z]+\s*(a-zA-Z]+)?.*\s[A-Za-z]+$","Please input a valid name")
-        self._genre=regex_checker(input("Genre:"),r"^[a-zA-Z]+$","Please input a valid genre")
-        self._publication_date=regex_checker(input("Publication Date: MM/DD/YYYY:"),r"^[0-1][0-9]/[0-3][0-9]/[1-2][0-9][0-9][0-9]$","Please enter a valid date in the following format MM/DD/YYYY")
+    def set_book(library):
+        title=regex_checker(input("Book Name:"),r"^[a-zA-Z1-9.%+-]+","Please input a valid book title")
+        author=regex_checker(input("Author:"),r"^[a-zA-Z]+\s*(a-zA-Z]+)?.*\s[A-Za-z]+$","Please input a valid name")
+        genre=regex_checker(input("Genre:"),r"^[a-zA-Z\s]+$","Please input a valid genre")
+        publication_date=regex_checker(input("Publication Date: MM/DD/YYYY:"),r"^[0-1][0-9]/[0-3][0-9]/[1-2][0-9][0-9][0-9]$","Please enter a valid date in the following format MM/DD/YYYY")
         library.append(BookOpperations(title,author,genre,publication_date,"Available"))
 
     #function to borrow book. Changes status of book to borrowed and adds a User object to "on_loan_to", to keep track of who currently has the book.         
@@ -253,10 +260,7 @@ class AuthorOperations:
             else:
                 print("Not a valid choice. Please choose from the listed menu items.")
 
-#Variables to hold objects that are created.
-users={}
-authors=[]
-library=[]
+
 
 #Regex checker to check user inpputed data.
 def regex_checker(text,pattern,error):
@@ -290,9 +294,9 @@ def write_file(file_name, my_data):
         elif type(my_data)==list and file_name=="book_info.txt":
             for an_item in my_data:
                 try:
-                    file.write(an_item.title+":"+an_item.author+":"+an_item.genre+":"+an_item.publication_date+":"+an_item.availability+":" + an_item.on_loan_to.name+"\n")
+                    file.write(an_item._title+":"+an_item._author+":"+an_item._genre+":"+an_item._publication_date+":"+an_item.availability+":" + an_item.on_loan_to.name+"\n")
                 except:
-                    file.write(an_item.title+":"+an_item.author+":"+an_item.genre+":"+an_item.publication_date+":"+an_item.availability+":"+"\n")
+                    file.write(an_item._title+":"+an_item._author+":"+an_item._genre+":"+an_item._publication_date+":"+an_item.availability+":"+"\n")
         elif type(my_data)==list and file_name=="author_info.txt":
             for an_item in my_data:
                 file.write(an_item.name+":"+an_item.biography+"\n")
@@ -321,10 +325,10 @@ def read_file(file_name,*book):
                     added=False
                     for user in users:
                         if on_loan_to==user.name.lower():
-                            library.append(BookOpperations(title,author,genre,publication_date,available,user))
+                            library.append(book.BookOpperations(title,author,genre,publication_date,available,user))
                             added=True
                     if not added:
-                        library.append(BookOpperations(title,author,genre,publication_date,available,UserOperations("","",[])))
+                        library.append(book.BookOpperations(title,author,genre,publication_date,available,UserOperations("","",[])))
                 return library
             except Exception as e:
                 library=[]
