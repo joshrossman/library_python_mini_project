@@ -30,7 +30,7 @@ class BookOpperations:
         if len(users[0])>=1:
             my_book=input("What book would you like to take out?")
             for book in library:
-                if my_book.lower() ==book.title.lower():
+                if my_book.lower() ==book._title.lower():
                     in_database=True
                     if book.availability=="Available":
                         in_database=True
@@ -38,7 +38,7 @@ class BookOpperations:
                         #runs a borrow book function with a UserOperations object, to keep track of which books a user currently has.
                         my_user=UserOperations.borrow_book(users,book)
                         book.on_loan_to=my_user
-                        print(f"{book.title} is currently available, and is being checked out to {my_user.name}")
+                        print(f"{book._title} is currently available, and is being checked out to {my_user.name}")
                         return in_database, is_available,book,library     
             if in_database and not is_available:
                 print("We do carry this book in our library. However, the book is currently checked out. Please check back in a few days and it may be avialable.")
@@ -53,14 +53,14 @@ class BookOpperations:
         is_found=False
         is_available=False
         for book in library:
-            if my_book.lower()==book.title.lower():
+            if my_book.lower()==book._title.lower():
                 is_found=True
-                my_book=book.title
+                my_book=book._title
                 if book.availability=="Borrowed":
                     is_available=True
-                    print(f"Thank you for returning {book.title} to the library!")
+                    print(f"Thank you for returning {book._title} to the library!")
                     book.availability="Available"
-                    UserOperations.return_book(book.on_loan_to,book.title)
+                    UserOperations.return_book(book.on_loan_to,book._title)
                     book.on_loan_to=''
                     return library,is_found,is_available
         if is_found and not is_available:  
@@ -73,7 +73,7 @@ class BookOpperations:
         my_book=input("What book would you like to search for?")
         is_found=False
         for book in library:
-            if my_book.lower()==book.title.lower():
+            if my_book.lower()==book._title.lower():
                 is_found=True
                 print(f"\nTitle:{book._title},\nAuthor:{book._author},\nGenre:{book._genre},\nPublication Date:{book._publication_date}\nAvailabiliy: {book.availability}")
                 return is_found
@@ -119,7 +119,7 @@ class UserOperations:
             for user in users:
                 for my_keys, my_items in user.items():
                     if my_items[0].lower() ==user_name.lower():
-                        my_items[2].append(book.title)
+                        my_items[2].append(book._title)
                         return my_keys
                     else:
                         continue
